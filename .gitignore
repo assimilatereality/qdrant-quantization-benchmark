@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Results and data
+results/*.png
+results/*.json
+results/*.csv
+!results/.gitkeep
+!results/README.md
+data/*.json
+*.json
+
+# OS
+.DS_Store
+Thumbs.db
+```
+
+**`requirements.txt`:**
+```
+sentence-transformers>=2.2.0
+qdrant-client>=1.7.0
+numpy>=1.24.0
+python-dotenv>=1.0.0
+matplotlib>=3.7.0
+pytest>=7.4.0
+```
+
+**`results/.gitkeep`:**
+```
+# Empty file to keep the folder in git
