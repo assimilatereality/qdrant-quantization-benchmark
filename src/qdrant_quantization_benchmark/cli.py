@@ -417,8 +417,8 @@ Note: You can use either 'qdrant-qbench' (short) or 'qdrant-quantization-benchma
     
     # Generate data command
     gen_data = subparsers.add_parser('generate-data', help='Generate test dataset')
-    gen_data.add_argument('--size', type=int, default=10000, help='Dataset size')
-    gen_data.add_argument('--output', default='data/dataset.json', help='Output file path')
+    gen_data.add_argument('-n','--size', type=int, default=10000, help='Dataset size')
+    gen_data.add_argument('-o','--output', default='data/dataset.json', help='Output file path')
     gen_data.add_argument('--tech', type=float, default=0.25, help='Tech domain proportion')
     gen_data.add_argument('--medical', type=float, default=0.25, help='Medical domain proportion')
     gen_data.add_argument('--pharma', type=float, default=0.25, help='Pharmaceutical proportion')
@@ -428,8 +428,8 @@ Note: You can use either 'qdrant-qbench' (short) or 'qdrant-quantization-benchma
     
     # Generate queries command
     gen_queries = subparsers.add_parser('generate-queries', help='Generate test queries')
-    gen_queries.add_argument('--num-queries', type=int, default=20, help='Number of queries')
-    gen_queries.add_argument('--output', default='data/queries.json', help='Output file path')
+    gen_queries.add_argument('-n','--num-queries', type=int, default=20, help='Number of queries')
+    gen_queries.add_argument('-o', '--output', default='data/queries.json', help='Output file path')
     gen_queries.add_argument('--tech', type=float, default=0.25, help='Tech query proportion')
     gen_queries.add_argument('--medical', type=float, default=0.25, help='Medical query proportion')
     gen_queries.add_argument('--pharma', type=float, default=0.25, help='Pharmaceutical proportion')
@@ -440,17 +440,17 @@ Note: You can use either 'qdrant-qbench' (short) or 'qdrant-quantization-benchma
     
     # Upload command
     upload = subparsers.add_parser('upload', help='Upload dataset to Qdrant')
-    upload.add_argument('--collection', required=True, help='Collection name')
-    upload.add_argument('--dataset', required=True, help='Dataset file path')
-    upload.add_argument('--batch-size', type=int, default=50, help='Batch size for upload')
+    upload.add_argument('-c', '--collection', required=True, help='Collection name')
+    upload.add_argument('-d', '--dataset', required=True, help='Dataset file path')
+    upload.add_argument('-b', '--batch-size', type=int, default=50, help='Batch size for upload')
     upload.add_argument('--enable-retry', action='store_true', help='Enable retry on timeout')
     upload.add_argument('--recreate', action='store_true', help='Recreate collection if exists')
     add_logging_arguments(upload)
     
     # Create quantized collections command
     create_quant = subparsers.add_parser('create-quantized', help='Create quantized collections')
-    create_quant.add_argument('--dataset', required=True, help='Dataset file path')
-    create_quant.add_argument('--methods', nargs='+', 
+    create_quant.add_argument('-d', '--dataset', required=True, help='Dataset file path')
+    create_quant.add_argument('-m', '--methods', nargs='+', 
                              choices=['scalar', 'binary', 'binary_2bit'],
                              default=['scalar', 'binary', 'binary_2bit'],
                              help='Quantization methods to use')
@@ -458,18 +458,18 @@ Note: You can use either 'qdrant-qbench' (short) or 'qdrant-quantization-benchma
     
     # Benchmark command
     bench = subparsers.add_parser('benchmark', help='Run performance benchmarks')
-    bench.add_argument('--collection', required=True, help='Collection name')
-    bench.add_argument('--queries', help='Queries file path (optional)')
+    bench.add_argument('-c', '--collection', required=True, help='Collection name')
+    bench.add_argument('-q', '--queries', help='Queries file path (optional)')
     bench.add_argument('--quantization', nargs='+',
                       choices=['scalar', 'binary', 'binary_2bit'],
                       help='Quantization methods to benchmark')
-    bench.add_argument('--output', help='Output file for results (JSON)')
+    bench.add_argument('-o', '--output', help='Output file for results (JSON)')
     add_logging_arguments(bench)
     
     # Visualize command
     viz = subparsers.add_parser('visualize', help='Generate visualization')
-    viz.add_argument('--results', required=True, help='Results file (JSON)')
-    viz.add_argument('--output', default='analysis.png', help='Output image path')
+    viz.add_argument('-r', '--results', required=True, help='Results file (JSON)')
+    viz.add_argument('-o', '--output', default='analysis.png', help='Output image path')
     add_logging_arguments(viz)
     
     args = parser.parse_args()
