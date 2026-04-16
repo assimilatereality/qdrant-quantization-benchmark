@@ -3,7 +3,7 @@
 A comprehensive benchmarking suite for evaluating and optimizing vector quantization methods in Qdrant vector databases. This tool helps you make data-driven decisions about quantization strategies by measuring performance, accuracy retention, and resource usage across different quantization techniques.
 
 ![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)
-![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)
+[![codecov](https://codecov.io/gh/assimilatereality/qdrant-quantization-benchmark/branch/main/graph/badge.svg)](https://codecov.io/gh/assimilatereality/qdrant-quantization-benchmark)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## 🎯 Purpose & Benefits
