@@ -373,7 +373,6 @@ qdrant-quantization-benchmark/
 ├── pyproject.toml              # Package configuration
 ├── README.md                    # This file
 ├── README_TESTING.md           # Testing guide
-├── STEP_5_SUMMARY.md           # Development summary
 └── .env                         # Environment config (gitignored)
 ```
 
