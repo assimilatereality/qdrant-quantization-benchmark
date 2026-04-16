@@ -5,6 +5,7 @@ Structured logging configuration using structlog.
 import logging
 import sys
 from typing import Optional
+
 import structlog
 from structlog.types import EventDict, WrappedLogger
 
@@ -26,13 +27,13 @@ def setup_logging(
 ) -> structlog.BoundLogger:
     """
     Configure structured logging for the application.
-    
+
     Args:
         level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         json_output: Output logs as JSON (for CloudWatch/monitoring)
         verbose: Enable verbose output (sets level to DEBUG)
         quiet: Suppress most output (sets level to ERROR)
-        
+
     Returns:
         Configured structlog logger
     """
@@ -43,14 +44,14 @@ def setup_logging(
         effective_level = "DEBUG"
     else:
         effective_level = level.upper()
-    
+
     # Configure standard library logging
     logging.basicConfig(
         format="%(message)s",
         stream=sys.stdout,
         level=getattr(logging, effective_level)
     )
-    
+
     # Configure structlog processors
     processors = [
         structlog.contextvars.merge_contextvars,
@@ -59,11 +60,11 @@ def setup_logging(
         add_app_context,
         structlog.processors.TimeStamper(fmt="iso", utc=True),
     ]
-    
+
     # Add exception formatting
     if not json_output:
         processors.append(structlog.processors.ExceptionPrettyPrinter())
-    
+
     # Choose renderer based on output format
     if json_output:
         processors.append(structlog.processors.JSONRenderer())
@@ -75,7 +76,7 @@ def setup_logging(
                 exception_formatter=structlog.dev.plain_traceback
             )
         )
-    
+
     structlog.configure(
         processors=processors,
         wrapper_class=structlog.make_filtering_bound_logger(
@@ -85,9 +86,9 @@ def setup_logging(
         logger_factory=structlog.PrintLoggerFactory(),
         cache_logger_on_first_use=True,
     )
-    
+
     logger = structlog.get_logger()
-    
+
     # Log configuration
     logger.debug(
         "logging_configured",
@@ -96,17 +97,17 @@ def setup_logging(
         verbose=verbose,
         quiet=quiet
     )
-    
+
     return logger
 
 
 def get_logger(name: Optional[str] = None) -> structlog.BoundLogger:
     """
     Get a logger instance.
-    
+
     Args:
         name: Optional logger name (typically module name)
-        
+
     Returns:
         Configured structlog logger
     """
@@ -119,20 +120,20 @@ def get_logger(name: Optional[str] = None) -> structlog.BoundLogger:
 class LoggerMixin:
     """
     Mixin class to add logging capability to other classes.
-    
+
     Usage:
         class MyClass(LoggerMixin):
             def __init__(self):
                 self.setup_logger(self.__class__.__name__)
-                
+
             def my_method(self):
                 self.log.info("doing_something", param=value)
     """
-    
+
     def setup_logger(self, name: str) -> None:
         """
         Set up logger for this class instance.
-        
+
         Args:
             name: Logger name (typically class name)
         """
@@ -142,7 +143,7 @@ class LoggerMixin:
 # Progress tracking helper
 class ProgressLogger:
     """Helper for logging progress of long-running operations."""
-    
+
     def __init__(
         self,
         logger: structlog.BoundLogger,
@@ -152,7 +153,7 @@ class ProgressLogger:
     ):
         """
         Initialize progress logger.
-        
+
         Args:
             logger: Structlog logger instance
             operation: Name of the operation
@@ -164,22 +165,22 @@ class ProgressLogger:
         self.total = total
         self.update_interval = update_interval
         self.processed = 0
-        
+
         self.logger.info(
             f"{operation}_started",
             operation=operation,
             total=total
         )
-    
+
     def update(self, count: int = 1) -> None:
         """
         Update progress counter.
-        
+
         Args:
             count: Number of items processed
         """
         self.processed += count
-        
+
         if self.processed % self.update_interval == 0 or self.processed == self.total:
             percent = (self.processed / self.total) * 100
             self.logger.info(
@@ -189,7 +190,7 @@ class ProgressLogger:
                 total=self.total,
                 percent=f"{percent:.1f}"
             )
-    
+
     def complete(self) -> None:
         """Mark operation as complete."""
         self.logger.info(
@@ -203,11 +204,11 @@ class ProgressLogger:
 # Timing context manager
 class Timer:
     """Context manager for timing operations with structured logging."""
-    
+
     def __init__(self, logger: structlog.BoundLogger, operation: str, **kwargs):
         """
         Initialize timer.
-        
+
         Args:
             logger: Structlog logger instance
             operation: Name of the operation being timed
@@ -218,7 +219,7 @@ class Timer:
         self.context = kwargs
         self.start_time = None
         self.duration_ms = None
-    
+
     def __enter__(self):
         """Start timing."""
         import time
@@ -229,12 +230,12 @@ class Timer:
             **self.context
         )
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         """End timing and log results."""
         import time
         self.duration_ms = (time.time() - self.start_time) * 1000
-        
+
         if exc_type is None:
             self.logger.info(
                 f"{self.operation}_completed",

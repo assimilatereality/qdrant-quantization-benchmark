@@ -2,22 +2,22 @@
 Shared pytest fixtures for qdrant-quantization-benchmark tests.
 """
 
-import pytest
+from unittest.mock import Mock
+
 import numpy as np
-from pathlib import Path
-from unittest.mock import Mock, MagicMock
+import pytest
 from qdrant_client import QdrantClient
-from qdrant_client.models import CollectionInfo, Distance, VectorParams
+from qdrant_client.models import CollectionInfo, Distance
 
 from qdrant_quantization_benchmark.config import (
-    BenchmarkSuiteConfig,
-    EmbeddingConfig,
-    CollectionConfig,
-    UploadConfig,
     BenchmarkConfig,
-    QuantizationConfig,
-    QdrantConnectionConfig,
+    BenchmarkSuiteConfig,
+    CollectionConfig,
+    EmbeddingConfig,
     LoggingConfig,
+    QdrantConnectionConfig,
+    QuantizationConfig,
+    UploadConfig,
 )
 from qdrant_quantization_benchmark.data_generator import DatasetGenerator
 from qdrant_quantization_benchmark.query_generator import QueryGenerator
@@ -27,25 +27,25 @@ from qdrant_quantization_benchmark.query_generator import QueryGenerator
 def mock_qdrant_client():
     """Mock QdrantClient for testing without actual Qdrant connection."""
     client = Mock(spec=QdrantClient)
-    
+
     # Mock collection_exists
     client.collection_exists.return_value = False
-    
+
     # Mock get_collection
     mock_collection_info = Mock(spec=CollectionInfo)
     mock_collection_info.vectors_count = 1000
     mock_collection_info.points_count = 1000
     mock_collection_info.status = "green"
     client.get_collection.return_value = mock_collection_info
-    
+
     # Mock upsert (returns None on success)
     client.upsert.return_value = None
-    
+
     # Mock query_points
     mock_response = Mock()
     mock_response.points = []
     client.query_points.return_value = mock_response
-    
+
     return client
 
 
@@ -53,15 +53,15 @@ def mock_qdrant_client():
 def mock_sentence_transformer(mocker):
     """Mock SentenceTransformer to avoid downloading models."""
     mock_model = Mock()
-    
+
     # encode() returns a numpy array of shape (384,)
     mock_model.encode.return_value = np.random.rand(384)
-    
+
     mocker.patch(
         'qdrant_quantization_benchmark.embeddings.SentenceTransformer',
         return_value=mock_model
     )
-    
+
     return mock_model
 
 
@@ -207,7 +207,7 @@ def mock_benchmark_results():
         "p99.5": 59.45,
         "p99.9": 59.87
     }
-    
+
     quantization = {
         "scalar": {
             "no_rescoring": {
@@ -250,5 +250,5 @@ def mock_benchmark_results():
             }
         }
     }
-    
+
     return baseline, quantization
