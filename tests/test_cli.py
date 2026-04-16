@@ -155,6 +155,7 @@ class TestCmdCreateQuantized:
         mock_client_class.return_value = mock_client
         
         args = Namespace(
+            collection="test_collection",
             dataset=str(temp_dataset_file),
             methods=['scalar'],
             log_level="ERROR",

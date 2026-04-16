@@ -41,13 +41,19 @@ pip install -e .
 qdrant-benchmark generate-data -n 10000 --output data/dataset.json
 
 # Upload to Qdrant
-qdrant-benchmark upload data/dataset.json --collection benchmark_test
+qdrant-benchmark upload -c benchmark_test -d data/dataset.json
 
 # Run benchmarks
-qdrant-benchmark benchmark benchmark_test --output results/
+qdrant-benchmark benchmark -c benchmark_test -o results/
+
+# Create quantized collections
+qdrant-benchmark create-quantized -c benchmark_test -d data/dataset.json
+
+# Run benchmarks with quantization
+qdrant-benchmark benchmark -c benchmark_test --quantization scalar binary binary_2bit -o results/benchmark_results.json
 
 # Visualize results
-qdrant-benchmark visualize results/ --output benchmark_report.png
+qdrant-benchmark visualize -r results/benchmark_results.json -o benchmark_report.png
 ```
 
 ## 📋 Table of Contents
@@ -228,73 +234,57 @@ qdrant-benchmark generate-queries \
 ### 3. Upload Data to Qdrant
 ```bash
 # Upload with default settings
-qdrant-benchmark upload data/dataset.json --collection my_collection
+qdrant-benchmark upload -c my_collection -d data/dataset.json
 
 # Custom batch size and retry settings
-qdrant-benchmark upload data/dataset.json \
-  --collection my_collection \
+qdrant-benchmark upload -c my_collection -d data/dataset.json \
   --batch-size 100 \
-  --enable-retry \
-  --max-retries 5
+  --enable-retry
 
 # Upload to multiple collections
-qdrant-benchmark upload data/dataset.json --collection baseline
-qdrant-benchmark upload data/dataset.json --collection test_v2
+qdrant-benchmark upload -c baseline -d data/dataset.json
+qdrant-benchmark upload -c test_v2 -d data/dataset.json
 ```
 
-### 4. Run Benchmarks
+### 4. Create Quantized Collections
 ```bash
-# Basic benchmark
-qdrant-benchmark benchmark my_collection --output results/
+# Create all quantization types (scalar, binary, binary_2bit)
+qdrant-benchmark create-quantized -c my_collection -d data/dataset.json
 
-# Test specific quantization methods
-qdrant-benchmark benchmark my_collection \
-  --methods scalar,binary \
-  --output results/quick_test/
+# Create specific quantization methods only
+qdrant-benchmark create-quantized -c my_collection -d data/dataset.json \
+  -m scalar binary
+```
 
-# Comprehensive benchmark with custom queries
-qdrant-benchmark benchmark my_collection \
-  --queries data/custom_queries.json \
-  --methods scalar,binary,binary_2bit,product \
-  --warmup \
-  --limit 20 \
-  --output results/full_benchmark/
+This creates collections named `my_collection_scalar`, `my_collection_binary`, and `my_collection_binary_2bit` in Qdrant.
 
-# Test oversampling factors
-qdrant-benchmark benchmark my_collection \
-  --tune-oversampling 2,3,5,8,10 \
-  --output results/oversampling_test/
+### 5. Run Benchmarks
+```bash
+# Baseline only (no quantization)
+qdrant-benchmark benchmark -c my_collection -o results/benchmark_results.json
+
+# Benchmark with all quantization methods
+qdrant-benchmark benchmark -c my_collection \
+  --quantization scalar binary binary_2bit \
+  -o results/benchmark_results.json
+
+# Benchmark with custom queries file
+qdrant-benchmark benchmark -c my_collection \
+  -q data/queries.json \
+  --quantization scalar binary binary_2bit \
+  -o results/benchmark_results.json
 ```
 
 **Benchmark Options:**
-- `--methods`: Quantization methods to test (scalar, binary, binary_2bit, product)
-- `--queries`: Custom query file (default: auto-generated)
-- `--warmup`: Enable cache warmup before testing
-- `--limit`: Number of results per query (default: 10)
-- `--tune-oversampling`: Test different oversampling factors
+- `-c/--collection`: Base collection name (required)
+- `--quantization`: Methods to test (scalar, binary, binary_2bit)
+- `-q/--queries`: Custom query file (default: auto-generated)
+- `-o/--output`: Output JSON file for results
 
-### 5. Visualize Results
+### 6. Visualize Results
 ```bash
 # Generate performance report
-qdrant-benchmark visualize results/ --output report.png
-
-# Multiple comparison formats
-qdrant-benchmark visualize results/ \
-  --output report.png \
-  --format png \
-  --dpi 300
-
-# Generate summary table
-qdrant-benchmark visualize results/ --summary-only
-```
-
-### 6. Cleanup
-```bash
-# Delete test collections
-qdrant-benchmark delete-collection my_collection
-
-# Delete multiple collections
-qdrant-benchmark delete-collection baseline test_v2 experimental
+qdrant-benchmark visualize -r results/benchmark_results.json -o report.png
 ```
 
 ## 🧪 Testing

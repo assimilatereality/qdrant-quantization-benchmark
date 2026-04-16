@@ -1,0 +1,16 @@
+# Core dependencies
+qdrant-client>=1.7.0
+sentence-transformers>=2.2.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+structlog>=23.1.0
+python-dotenv>=1.0.0
+
+# Development dependencies (install with: pip install -e ".[dev]")
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# pytest-mock>=3.11.0
+# pytest-timeout>=2.2.0
+# black>=23.7.0
+# ruff>=0.0.282
+# mypy>=1.4.0

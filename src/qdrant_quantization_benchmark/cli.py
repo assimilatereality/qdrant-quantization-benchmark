@@ -212,7 +212,7 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
         quantization_results = {}
         if args.quantization:
             for method in args.quantization:
-                quantized_collection = f"quantized_{method}"
+                quantized_collection = f"{args.collection}_{method}"
                 log.info("benchmarking_quantization", method=method, collection=quantized_collection)
                 
                 quantization_results[method] = benchmark.benchmark_quantization(
@@ -230,8 +230,12 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
             }
             
             output_path = Path(args.output)
-            output_path.parent.mkdir(parents=True, exist_ok=True)
-            
+            if output_path.is_dir() or str(args.output).endswith('/'):
+                output_path.mkdir(parents=True, exist_ok=True)
+                output_path = output_path / "benchmark_results.json"
+            else:
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+
             with open(output_path, 'w') as f:
                 json.dump(results, f, indent=2)
             
@@ -293,7 +297,7 @@ def cmd_create_quantized(args: argparse.Namespace) -> None:
                 log.error("unknown_quantization_method", method=method_name)
                 continue
             
-            collection_name = f"quantized_{method_name}"
+            collection_name = f"{args.collection}_{method_name}"
             log.info("creating_quantized_collection", method=method_name, collection=collection_name)
             
             # Create collection
@@ -364,7 +368,7 @@ def add_logging_arguments(parser: argparse.ArgumentParser) -> None:
         help='Enable verbose output (sets log level to DEBUG)'
     )
     log_group.add_argument(
-        '-q', '--quiet',
+        '--quiet',
         action='store_true',
         help='Suppress most output (sets log level to ERROR)'
     )
@@ -449,8 +453,9 @@ Note: You can use either 'qdrant-qbench' (short) or 'qdrant-quantization-benchma
     
     # Create quantized collections command
     create_quant = subparsers.add_parser('create-quantized', help='Create quantized collections')
+    create_quant.add_argument('-c', '--collection', required=True, help='Base collection name (quantized collections will be named {collection}_{method})')
     create_quant.add_argument('-d', '--dataset', required=True, help='Dataset file path')
-    create_quant.add_argument('-m', '--methods', nargs='+', 
+    create_quant.add_argument('-m', '--methods', nargs='+',
                              choices=['scalar', 'binary', 'binary_2bit'],
                              default=['scalar', 'binary', 'binary_2bit'],
                              help='Quantization methods to use')
