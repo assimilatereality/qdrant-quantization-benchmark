@@ -415,7 +415,7 @@ qdrant-quantization-benchmark/
 
 ## 📊 Performance Results
 
-### Example Benchmark Results
+### Results from benchmarking a 10,000-item dataset on April 15, 2026
 
 Based on 10,000 item dataset with all-MiniLM-L6-v2 embeddings:
 
@@ -436,6 +436,8 @@ The tool generates comprehensive performance visualizations:
 - **Speedup Analysis**: Relative performance improvements
 - **Rescoring Impact**: With vs without rescoring comparison
 - **Summary Tables**: Quick reference performance data
+
+![Benchmark Report](benchmark_report.png)
 
 ## 🤝 Contributing
 
