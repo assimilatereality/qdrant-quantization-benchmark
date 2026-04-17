@@ -441,11 +441,7 @@ The tool generates comprehensive performance visualizations:
 
 ![Benchmark Report](benchmark_report.png)
 
-## 🤝 Contributing
-
-Contributions are welcome! This project follows standard open-source practices.
-
-### Development Setup
+## 🤝 Development Setup
 ```bash
 # Clone and setup
 git clone https://github.com/assimilatereality/qdrant-quantization-benchmark.git
@@ -474,14 +470,6 @@ mypy src/
 - **Linting**: Pass Ruff checks
 - **Type Hints**: Add type annotations for public APIs
 - **Documentation**: Update README for new features
-
-### Submitting Changes
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 🐛 Troubleshooting
 
@@ -544,7 +532,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Version History
 
-- **v0.2.0** (Current) - Complete test suite with 90% coverage
+- **v0.2.0** (Current) - Complete test suite with 84.15% coverage
 - **v0.1.0** - Initial release with core benchmarking features
 
 ---
