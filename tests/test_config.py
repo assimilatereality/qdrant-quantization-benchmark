@@ -49,8 +49,9 @@ class TestEmbeddingConfig:
     def test_default_values(self):
         """Test default embedding configuration."""
         config = EmbeddingConfig()
-        assert config.model_name == "all-MiniLM-L6-v2"
-        assert config.vector_size == 384
+        assert config.model_name == "BAAI/bge-large-en-v1.5"
+        # assert config.model_name == "all-MiniLM-L6-v2"
+        assert config.vector_size == 1024 #384
 
     def test_custom_model(self):
         """Test custom model configuration."""
@@ -220,8 +221,8 @@ class TestBenchmarkSuiteConfig:
         config = BenchmarkSuiteConfig()
 
         assert config.logging.level == "INFO"
-        assert config.embedding.model_name == "all-MiniLM-L6-v2"
-        assert config.embedding.vector_size == 384
+        assert config.embedding.model_name == "BAAI/bge-large-en-v1.5" #"all-MiniLM-L6-v2"
+        assert config.embedding.vector_size == 1024 #384
         assert config.collection.distance == Distance.COSINE
         assert config.upload.batch_size == 50
         assert config.benchmark.warmup_enabled is True
