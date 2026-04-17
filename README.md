@@ -417,14 +417,16 @@ qdrant-quantization-benchmark/
 
 ### Results from benchmarking a 10,000-item dataset on April 15, 2026
 
-Based on 10,000 item dataset with all-MiniLM-L6-v2 embeddings:
+| Method | Baseline P95 (ms) | Quantized P95 (ms) | Speedup | Compression |
+|--------|-------------------|-------------------|---------|-------------|
+| **Baseline** | 15.6 | - | 1.0x | 1.0x |
+| **Scalar** | 15.6 | 11.9 | 1.32x | 4.0x |
+| **Binary** | 15.6 | 8.1 | 1.94x | 32.0x |
+| **Binary 2-bit** | 15.6 | 8.7 | 1.79x | 16.0x |
 
-| Method | P95 Latency | Speedup | Compression | Accuracy Retention |
-|--------|-------------|---------|-------------|-------------------|
-| **Baseline** | 45ms | 1.0x | 1.0x | 100% |
-| **Scalar** | 23ms | 2.0x | 4.0x | 99.5% |
-| **Binary** | 1.2ms | 37.5x | 32.0x | 97.8% |
-| **Binary 2-bit** | 2.3ms | 19.6x | 16.0x | 98.9% |
+*Results from benchmarking 10,000 items using BAAI/bge-large-en-v1.5 embeddings 
+(1024 dimensions) on a local Qdrant instance. Cloud-hosted results will show 
+smaller speedups due to network latency overhead.*
 
 *Results vary based on dataset size, vector dimensions, and hardware.*
 
