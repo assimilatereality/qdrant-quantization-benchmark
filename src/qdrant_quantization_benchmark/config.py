@@ -5,6 +5,7 @@ Configuration management for Qdrant benchmark suite.
 import os
 from dataclasses import dataclass, field
 from typing import Dict, List
+
 from qdrant_client import models
 
 
@@ -22,7 +23,7 @@ class EmbeddingConfig:
     """Configuration for embedding model."""
     model_name: str = "BAAI/bge-large-en-v1.5"  #all-MiniLM-L6-v2"
     vector_size: int = int(os.getenv("VECTOR_SIZE", "1024")) #384
-    
+
 
 @dataclass
 class CollectionConfig:
@@ -39,7 +40,7 @@ class UploadConfig:
     enable_retry: bool = False
     max_retries: int = 3
     initial_backoff: float = 2.0
-    
+
 
 @dataclass
 class BenchmarkConfig:
@@ -89,7 +90,7 @@ class QuantizationConfig:
         "expected_speedup": "20x",
         "expected_compression": "16x"
     })
-    
+
     def get_all_configs(self) -> Dict[str, Dict]:
         """Return all quantization configurations."""
         return {
@@ -105,7 +106,7 @@ class QdrantConnectionConfig:
     url: str = field(default_factory=lambda: os.getenv("QDRANT_URL", ""))
     api_key: str = field(default_factory=lambda: os.getenv("QDRANT_API_KEY", ""))
     timeout: int = 60
-    
+
     def __post_init__(self) -> None:
         """Validate configuration after initialization."""
         if not self.url:
@@ -124,7 +125,7 @@ class BenchmarkSuiteConfig:
     upload: UploadConfig = field(default_factory=UploadConfig)
     benchmark: BenchmarkConfig = field(default_factory=BenchmarkConfig)
     quantization: QuantizationConfig = field(default_factory=QuantizationConfig)
-    
+
     @classmethod
     def from_env(cls, logging_config: LoggingConfig = None) -> "BenchmarkSuiteConfig":
         """Create configuration from environment variables."""
