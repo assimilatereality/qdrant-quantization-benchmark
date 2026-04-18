@@ -419,12 +419,12 @@ qdrant-quantization-benchmark/
 
 | Method | Baseline P95 (ms) | Quantized P95 (ms) | Speedup | Compression |
 |--------|-------------------|-------------------|---------|-------------|
-| **Baseline** | 15.6 | - | 1.0x | 1.0x |
-| **Scalar** | 15.6 | 11.9 | 1.32x | 4.0x |
-| **Binary** | 15.6 | 8.1 | 1.94x | 32.0x |
-| **Binary 2-bit** | 15.6 | 8.7 | 1.79x | 16.0x |
+| **Baseline** | 43.7 | - | 1.0x | 1.0x |
+| **Scalar** | 43.7 | 37.3 | 1.17x | 4.0x |
+| **Binary** | 43.7 | 9.2 | 4.75x | 32.0x |
+| **Binary 2-bit** | 43.7 | 8.4 | 5.21x | 16.0x |
 
-*Results from benchmarking 10,000 items using BAAI/bge-large-en-v1.5 embeddings 
+*Results from benchmarking 50,000 items using BAAI/bge-large-en-v1.5 embeddings 
 (1024 dimensions) on a local Qdrant instance. Cloud-hosted results will show 
 smaller speedups due to network latency overhead.*
 
